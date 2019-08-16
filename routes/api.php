@@ -13,4 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::apiResource('events', 'Api\EventApiController');
+Route::apiResource('events', 'Api\EventApiController')->only(['index', 'store', 'show', 'update']);

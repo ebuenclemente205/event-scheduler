@@ -18,6 +18,7 @@
                 @selected="highlightFrom"
                 :highlighted="dateHighlighted"
                 :disabledDates="disabledDates"
+                format="yyyy-MM-dd"
                 input-class="form-control"
                 placeholder="Start date"
                 v-model="eventForm.from"
@@ -29,6 +30,7 @@
                 @selected="highlightTo"
                 :highlighted="dateHighlighted"
                 :disabledDates="disabledDates"
+                format="yyyy-MM-dd"
                 input-class="form-control"
                 placeholder="End date"
                 v-model="eventForm.to"
@@ -41,7 +43,7 @@
                   v-for="(day, index) in weekDays"
                   :value="day"
                   :key="index"
-                  v-model="eventForm.selectedDays"
+                  v-model="eventForm.days"
                 >{{ day }}</b-form-checkbox>
               </b-form-checkbox-group>
             </b-form-group>
@@ -53,10 +55,22 @@
       <b-col md="8">
         <h2>{{ currentDate | formatToMonthName }}</h2>
         <b-list-group>
-          <b-list-group-item
-            v-for="(day, index) in monthDays"
-            :key="index"
-          >{{ day | formatToDateDay }}</b-list-group-item>
+          <b-list-group-item v-for="(day, index) in monthDays" :key="index">
+            <b-row>
+              <b-col md="2">{{ day | formatToDateDay }}</b-col>
+              <b-col md="10">
+                <small>
+                  <b-alert show variant="dark" v-for="event in events" :key="event.id">
+                    <span
+                      v-for="(eventDay, eventIndex) in event.eventDays"
+                      v-if="day|formatToDateDay == eventDay|formatToDateDay"
+                      :key="eventIndex"
+                    >{{ event.title }}</span>
+                  </b-alert>
+                </small>
+              </b-col>
+            </b-row>
+          </b-list-group-item>
         </b-list-group>
       </b-col>
     </b-row>
@@ -66,13 +80,10 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import { eachDay, startOfMonth, endOfMonth, format } from "date-fns";
+import axios from "axios";
 const CURRENT_DATE = new Date();
 
 export default {
-  mounted() {
-    console.log("Component mounted.");
-  },
-
   components: {
     Datepicker
   },
@@ -83,7 +94,7 @@ export default {
         title: "",
         from: "",
         to: "",
-        selectedDays: []
+        days: []
       },
       dateHighlighted: {
         to: "",
@@ -95,8 +106,23 @@ export default {
       },
       weekDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       currentDate: CURRENT_DATE,
-      monthDays: eachDay(startOfMonth(CURRENT_DATE), endOfMonth(CURRENT_DATE))
+      monthDays: eachDay(startOfMonth(CURRENT_DATE), endOfMonth(CURRENT_DATE)),
+      events: [],
+      formatToDateDay: function() {},
+      formatToDay: function() {}
     };
+  },
+
+  mounted() {
+    const url = "/api/events";
+    axios.get(url).then(response => {
+      const eventResponse = response.data.data;
+
+      eventResponse.forEach(event => {
+        event.eventDays = eachDay(new Date(event.from), new Date(event.to));
+        this.events.push(event);
+      });
+    });
   },
 
   methods: {
@@ -112,8 +138,11 @@ export default {
       this.dateHighlighted.to = val;
     },
 
-    submitEvent() {
-      console.log(this.eventForm);
+    submitEvent(event) {
+      const url = "/api/events";
+      axios.post(url, this.eventForm).then(response => {
+        console.log(response);
+      });
     }
   },
 
@@ -124,6 +153,10 @@ export default {
 
     formatToDateDay: function(value) {
       return format(value, "D ddd");
+    },
+
+    formatToDay: function(value) {
+      return format(value, "ddd");
     }
   }
 };

@@ -30,7 +30,7 @@ class EventApiController extends Controller
     {
         $event = Event::create($request->all());
 
-        return new EventCollection($event);
+        return new EventResource($event);
     }
 
     /**
@@ -54,6 +54,7 @@ class EventApiController extends Controller
     public function update(Request $request, Event $event)
     {
         $event = $event->update($request->all());
+
         return new EventCollection($event);
     }
 }
