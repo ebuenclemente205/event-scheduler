@@ -18,6 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->date('from');
             $table->date('to');
+            $table->string('days');
             $table->softDeletes();
             $table->timestamps();
         });
