@@ -60,13 +60,15 @@
               <b-col md="2">{{ day | formatToDateDay }}</b-col>
               <b-col md="10">
                 <small>
-                  <b-alert show variant="dark" v-for="event in events" :key="event.id">
-                    <span
-                      v-for="(eventDay, eventIndex) in event.eventDays"
-                      v-if="day|formatToDateDay == eventDay|formatToDateDay"
-                      :key="eventIndex"
-                    >{{ event.title }}</span>
-                  </b-alert>
+                  <div v-for="event in events" :key="event.id">
+                    <div v-for="(eventDay, eventDaysKey) in event.eventDays" :key="eventDaysKey">
+                      <div v-if="checkEventDayEqual(eventDay, day)">
+                        <b-alert v-if="checkDayEqual(event.days, day)" show variant="dark">
+                          <span>{{ event.title }}</span>
+                        </b-alert>
+                      </div>
+                    </div>
+                  </div>
                 </small>
               </b-col>
             </b-row>
@@ -79,7 +81,7 @@
 
 <script>
 import Datepicker from "vuejs-datepicker";
-import { eachDay, startOfMonth, endOfMonth, format } from "date-fns";
+import { isEqual, eachDay, startOfMonth, endOfMonth, format } from "date-fns";
 import axios from "axios";
 const CURRENT_DATE = new Date();
 
@@ -114,12 +116,12 @@ export default {
   },
 
   mounted() {
-    const url = "/api/events";
+    let url = "/api/events";
     axios.get(url).then(response => {
-      const eventResponse = response.data.data;
+      let eventResponse = response.data.data;
 
       eventResponse.forEach(event => {
-        event.eventDays = eachDay(new Date(event.from), new Date(event.to));
+        event.eventDays = eachDay(event.from, event.to);
         this.events.push(event);
       });
     });
@@ -139,10 +141,20 @@ export default {
     },
 
     submitEvent(event) {
-      const url = "/api/events";
+      let url = "/api/events";
       axios.post(url, this.eventForm).then(response => {
-        console.log(response);
+        let eventResponse = response.data.data;
+        eventResponse.eventDays = eachDay(eventResponse.from, eventResponse.to);
+        this.events.push(eventResponse);
       });
+    },
+
+    checkDayEqual(chosenDays, day) {
+      return chosenDays.indexOf(format(day, "ddd")) > -1;
+    },
+
+    checkEventDayEqual(eventDay, day) {
+      return isEqual(eventDay, day);
     }
   },
 

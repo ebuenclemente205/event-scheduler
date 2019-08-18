@@ -1494,7 +1494,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -1829,6 +1829,28 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+module.exports = function isBuffer (obj) {
+  return obj != null && obj.constructor != null &&
+    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/App.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/App.vue?vue&type=script&lang=js& ***!
@@ -1843,6 +1865,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(date_fns__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+//
+//
 //
 //
 //
@@ -1961,7 +1985,7 @@ var CURRENT_DATE = new Date();
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
       var eventResponse = response.data.data;
       eventResponse.forEach(function (event) {
-        event.eventDays = Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["eachDay"])(new Date(event.from), new Date(event.to));
+        event.eventDays = Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["eachDay"])(event.from, event.to);
 
         _this.events.push(event);
       });
@@ -1978,10 +2002,21 @@ var CURRENT_DATE = new Date();
       this.dateHighlighted.to = val;
     },
     submitEvent: function submitEvent(event) {
+      var _this2 = this;
+
       var url = "/api/events";
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post(url, this.eventForm).then(function (response) {
-        console.log(response);
+        var eventResponse = response.data.data;
+        eventResponse.eventDays = Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["eachDay"])(eventResponse.from, eventResponse.to);
+
+        _this2.events.push(eventResponse);
       });
+    },
+    checkDayEqual: function checkDayEqual(chosenDays, day) {
+      return chosenDays.indexOf(Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["format"])(day, "ddd")) > -1;
+    },
+    checkEventDayEqual: function checkEventDayEqual(eventDay, day) {
+      return Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(eventDay, day);
     }
   },
   filters: {
@@ -37733,28 +37768,6 @@ module.exports = subYears
 
 /***/ }),
 
-/***/ "./node_modules/is-buffer/index.js":
-/*!*****************************************!*\
-  !*** ./node_modules/is-buffer/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-module.exports = function isBuffer (obj) {
-  return obj != null && obj.constructor != null &&
-    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/popper.js/dist/esm/popper.js":
 /*!***************************************************!*\
   !*** ./node_modules/popper.js/dist/esm/popper.js ***!
@@ -42197,27 +42210,45 @@ var render = function() {
                               "small",
                               _vm._l(_vm.events, function(event) {
                                 return _c(
-                                  "b-alert",
-                                  {
-                                    key: event.id,
-                                    attrs: { show: "", variant: "dark" }
-                                  },
+                                  "div",
+                                  { key: event.id },
                                   _vm._l(event.eventDays, function(
                                     eventDay,
-                                    eventIndex
+                                    eventDaysKey
                                   ) {
-                                    return day |
-                                      (_vm.formatToDateDay == eventDay) |
-                                      _vm.formatToDateDay
-                                      ? _c("span", { key: eventIndex }, [
-                                          _vm._v(_vm._s(event.title))
-                                        ])
-                                      : _vm._e()
+                                    return _c("div", { key: eventDaysKey }, [
+                                      _vm.checkEventDayEqual(eventDay, day)
+                                        ? _c(
+                                            "div",
+                                            [
+                                              _vm.checkDayEqual(event.days, day)
+                                                ? _c(
+                                                    "b-alert",
+                                                    {
+                                                      attrs: {
+                                                        show: "",
+                                                        variant: "dark"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("span", [
+                                                        _vm._v(
+                                                          _vm._s(event.title)
+                                                        )
+                                                      ])
+                                                    ]
+                                                  )
+                                                : _vm._e()
+                                            ],
+                                            1
+                                          )
+                                        : _vm._e()
+                                    ])
                                   }),
                                   0
                                 )
                               }),
-                              1
+                              0
                             )
                           ])
                         ],
@@ -56917,8 +56948,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/bobbyclemente/Documents/Playground/eventapp-using-laravel-vuejs/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/bobbyclemente/Documents/Playground/eventapp-using-laravel-vuejs/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/ebuenjrclemente/Documents/DevPlayground/appetiser-events/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/ebuenjrclemente/Documents/DevPlayground/appetiser-events/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
