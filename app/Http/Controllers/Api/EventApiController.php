@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
 use App\Http\Resources\EventCollection;
 use App\Event;
+use App\Http\Requests\EventScheduleRequest;
 
 class EventApiController extends Controller
 {
@@ -26,7 +27,7 @@ class EventApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EventScheduleRequest $request)
     {
         $event = Event::create($request->all());
 

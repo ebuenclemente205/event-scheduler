@@ -1494,7 +1494,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -1829,28 +1829,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
-/*!************************************************************!*\
-  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-module.exports = function isBuffer (obj) {
-  return obj != null && obj.constructor != null &&
-    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/App.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/App.vue?vue&type=script&lang=js& ***!
@@ -1865,6 +1843,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(date_fns__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1962,6 +1955,12 @@ var CURRENT_DATE = new Date();
         to: "",
         days: []
       },
+      eventError: {
+        title: "",
+        from: "",
+        to: "",
+        days: []
+      },
       dateHighlighted: {
         to: "",
         from: "",
@@ -2010,6 +2009,28 @@ var CURRENT_DATE = new Date();
         eventResponse.eventDays = Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["eachDay"])(eventResponse.from, eventResponse.to);
 
         _this2.events.push(eventResponse);
+
+        _this2.clearEventForm();
+
+        swal("New Event!", "Event has been successfully added!", "success");
+      })["catch"](function (error) {
+        var errorResponse = error.response.data.errors;
+
+        if (errorResponse.title) {
+          _this2.eventError.title = errorResponse.title;
+        }
+
+        if (errorResponse.from) {
+          _this2.eventError.from = errorResponse.from;
+        }
+
+        if (errorResponse.to) {
+          _this2.eventError.to = errorResponse.to;
+        }
+
+        if (errorResponse.days) {
+          _this2.eventError.days = errorResponse.days;
+        }
       });
     },
     checkDayEqual: function checkDayEqual(chosenDays, day) {
@@ -2017,6 +2038,19 @@ var CURRENT_DATE = new Date();
     },
     checkEventDayEqual: function checkEventDayEqual(eventDay, day) {
       return Object(date_fns__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(eventDay, day);
+    },
+    clearEventForm: function clearEventForm() {
+      this.dateHighlighted = {
+        to: "",
+        from: "",
+        includeDisabled: true
+      };
+      this.eventForm = {
+        title: "",
+        from: "",
+        to: "",
+        days: []
+      };
     }
   },
   filters: {
@@ -2033,6 +2067,1241 @@ var CURRENT_DATE = new Date();
     }
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap-sweetalert/dist/sweetalert.css":
+/*!***************************************************************!*\
+  !*** ./node_modules/bootstrap-sweetalert/dist/sweetalert.css ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./sweetalert.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/bootstrap-sweetalert/dist/sweetalert.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap-sweetalert/dist/sweetalert.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/bootstrap-sweetalert/dist/sweetalert.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var require;var require;var __WEBPACK_AMD_DEFINE_RESULT__;;(function(window, document, undefined) {
+"use strict";
+
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var defaultParams = {
+  title: '',
+  text: '',
+  type: null,
+  allowOutsideClick: false,
+  showConfirmButton: true,
+  showCancelButton: false,
+  closeOnConfirm: true,
+  closeOnCancel: true,
+  confirmButtonText: 'OK',
+  confirmButtonClass: 'btn-primary',
+  cancelButtonText: 'Cancel',
+  cancelButtonClass: 'btn-default',
+  containerClass: '',
+  titleClass: '',
+  textClass: '',
+  imageUrl: null,
+  imageSize: null,
+  timer: null,
+  customClass: '',
+  html: false,
+  animation: true,
+  allowEscapeKey: true,
+  inputType: 'text',
+  inputPlaceholder: '',
+  inputValue: '',
+  showLoaderOnConfirm: false
+};
+
+exports.default = defaultParams;
+
+},{}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleCancel = exports.handleConfirm = exports.handleButton = undefined;
+
+var _handleSwalDom = require('./handle-swal-dom');
+
+var _handleDom = require('./handle-dom');
+
+/*
+ * User clicked on "Confirm"/"OK" or "Cancel"
+ */
+var handleButton = function handleButton(event, params, modal) {
+  var e = event || window.event;
+  var target = e.target || e.srcElement;
+
+  var targetedConfirm = target.className.indexOf('confirm') !== -1;
+  var targetedOverlay = target.className.indexOf('sweet-overlay') !== -1;
+  var modalIsVisible = (0, _handleDom.hasClass)(modal, 'visible');
+  var doneFunctionExists = params.doneFunction && modal.getAttribute('data-has-done-function') === 'true';
+
+  // Since the user can change the background-color of the confirm button programmatically,
+  // we must calculate what the color should be on hover/active
+  var normalColor, hoverColor, activeColor;
+  if (targetedConfirm && params.confirmButtonColor) {
+    normalColor = params.confirmButtonColor;
+    hoverColor = colorLuminance(normalColor, -0.04);
+    activeColor = colorLuminance(normalColor, -0.14);
+  }
+
+  function shouldSetConfirmButtonColor(color) {
+    if (targetedConfirm && params.confirmButtonColor) {
+      target.style.backgroundColor = color;
+    }
+  }
+
+  switch (e.type) {
+    case 'click':
+      var clickedOnModal = modal === target;
+      var clickedOnModalChild = (0, _handleDom.isDescendant)(modal, target);
+
+      // Ignore click outside if allowOutsideClick is false
+      if (!clickedOnModal && !clickedOnModalChild && modalIsVisible && !params.allowOutsideClick) {
+        break;
+      }
+
+      if (targetedConfirm && doneFunctionExists && modalIsVisible) {
+        handleConfirm(modal, params);
+      } else if (doneFunctionExists && modalIsVisible || targetedOverlay) {
+        handleCancel(modal, params);
+      } else if ((0, _handleDom.isDescendant)(modal, target) && target.tagName === 'BUTTON') {
+        sweetAlert.close();
+      }
+      break;
+  }
+};
+
+/*
+ *  User clicked on "Confirm"/"OK"
+ */
+var handleConfirm = function handleConfirm(modal, params) {
+  var callbackValue = true;
+
+  if ((0, _handleDom.hasClass)(modal, 'show-input')) {
+    callbackValue = modal.querySelector('input').value;
+
+    if (!callbackValue) {
+      callbackValue = '';
+    }
+  }
+
+  params.doneFunction(callbackValue);
+
+  if (params.closeOnConfirm) {
+    sweetAlert.close();
+  }
+  // Disable cancel and confirm button if the parameter is true
+  if (params.showLoaderOnConfirm) {
+    sweetAlert.disableButtons();
+  }
+};
+
+/*
+ *  User clicked on "Cancel"
+ */
+var handleCancel = function handleCancel(modal, params) {
+  // Check if callback function expects a parameter (to track cancel actions)
+  var functionAsStr = String(params.doneFunction).replace(/\s/g, '');
+  var functionHandlesCancel = functionAsStr.substring(0, 9) === 'function(' && functionAsStr.substring(9, 10) !== ')';
+
+  if (functionHandlesCancel) {
+    params.doneFunction(false);
+  }
+
+  if (params.closeOnCancel) {
+    sweetAlert.close();
+  }
+};
+
+exports.handleButton = handleButton;
+exports.handleConfirm = handleConfirm;
+exports.handleCancel = handleCancel;
+
+},{"./handle-dom":3,"./handle-swal-dom":5}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var hasClass = function hasClass(elem, className) {
+  return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+};
+
+var addClass = function addClass(elem, className) {
+  if (!hasClass(elem, className)) {
+    elem.className += ' ' + className;
+  }
+};
+
+var removeClass = function removeClass(elem, className) {
+  var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
+  if (hasClass(elem, className)) {
+    while (newClass.indexOf(' ' + className + ' ') >= 0) {
+      newClass = newClass.replace(' ' + className + ' ', ' ');
+    }
+    elem.className = newClass.replace(/^\s+|\s+$/g, '');
+  }
+};
+
+var escapeHtml = function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+};
+
+var _show = function _show(elem) {
+  elem.style.opacity = '';
+  elem.style.display = 'block';
+};
+
+var show = function show(elems) {
+  if (elems && !elems.length) {
+    return _show(elems);
+  }
+  for (var i = 0; i < elems.length; ++i) {
+    _show(elems[i]);
+  }
+};
+
+var _hide = function _hide(elem) {
+  elem.style.opacity = '';
+  elem.style.display = 'none';
+};
+
+var hide = function hide(elems) {
+  if (elems && !elems.length) {
+    return _hide(elems);
+  }
+  for (var i = 0; i < elems.length; ++i) {
+    _hide(elems[i]);
+  }
+};
+
+var isDescendant = function isDescendant(parent, child) {
+  var node = child.parentNode;
+  while (node !== null) {
+    if (node === parent) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
+};
+
+var getTopMargin = function getTopMargin(elem) {
+  elem.style.left = '-9999px';
+  elem.style.display = 'block';
+
+  var height = elem.clientHeight,
+      padding;
+  if (typeof getComputedStyle !== "undefined") {
+    // IE 8
+    padding = parseInt(getComputedStyle(elem).getPropertyValue('padding-top'), 10);
+  } else {
+    padding = parseInt(elem.currentStyle.padding);
+  }
+
+  elem.style.left = '';
+  elem.style.display = 'none';
+  return '-' + parseInt((height + padding) / 2) + 'px';
+};
+
+var fadeIn = function fadeIn(elem, interval) {
+  if (+elem.style.opacity < 1) {
+    interval = interval || 16;
+    elem.style.opacity = 0;
+    elem.style.display = 'block';
+    var last = +new Date();
+    var tick = function tick() {
+      elem.style.opacity = +elem.style.opacity + (new Date() - last) / 100;
+      last = +new Date();
+
+      if (+elem.style.opacity < 1) {
+        setTimeout(tick, interval);
+      }
+    };
+    tick();
+  }
+  elem.style.display = 'block'; //fallback IE8
+};
+
+var fadeOut = function fadeOut(elem, interval) {
+  interval = interval || 16;
+  elem.style.opacity = 1;
+  var last = +new Date();
+  var tick = function tick() {
+    elem.style.opacity = +elem.style.opacity - (new Date() - last) / 100;
+    last = +new Date();
+
+    if (+elem.style.opacity > 0) {
+      setTimeout(tick, interval);
+    } else {
+      elem.style.display = 'none';
+    }
+  };
+  tick();
+};
+
+var fireClick = function fireClick(node) {
+  // Taken from http://www.nonobtrusive.com/2011/11/29/programatically-fire-crossbrowser-click-event-with-javascript/
+  // Then fixed for today's Chrome browser.
+  if (typeof MouseEvent === 'function') {
+    // Up-to-date approach
+    var mevt = new MouseEvent('click', {
+      view: window,
+      bubbles: false,
+      cancelable: true
+    });
+    node.dispatchEvent(mevt);
+  } else if (document.createEvent) {
+    // Fallback
+    var evt = document.createEvent('MouseEvents');
+    evt.initEvent('click', false, false);
+    node.dispatchEvent(evt);
+  } else if (document.createEventObject) {
+    node.fireEvent('onclick');
+  } else if (typeof node.onclick === 'function') {
+    node.onclick();
+  }
+};
+
+var stopEventPropagation = function stopEventPropagation(e) {
+  // In particular, make sure the space bar doesn't scroll the main window.
+  if (typeof e.stopPropagation === 'function') {
+    e.stopPropagation();
+    e.preventDefault();
+  } else if (window.event && window.event.hasOwnProperty('cancelBubble')) {
+    window.event.cancelBubble = true;
+  }
+};
+
+exports.hasClass = hasClass;
+exports.addClass = addClass;
+exports.removeClass = removeClass;
+exports.escapeHtml = escapeHtml;
+exports._show = _show;
+exports.show = show;
+exports._hide = _hide;
+exports.hide = hide;
+exports.isDescendant = isDescendant;
+exports.getTopMargin = getTopMargin;
+exports.fadeIn = fadeIn;
+exports.fadeOut = fadeOut;
+exports.fireClick = fireClick;
+exports.stopEventPropagation = stopEventPropagation;
+
+},{}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _handleDom = require('./handle-dom');
+
+var _handleSwalDom = require('./handle-swal-dom');
+
+var handleKeyDown = function handleKeyDown(event, params, modal) {
+  var e = event || window.event;
+  var keyCode = e.keyCode || e.which;
+
+  var $okButton = modal.querySelector('button.confirm');
+  var $cancelButton = modal.querySelector('button.cancel');
+  var $modalButtons = modal.querySelectorAll('button[tabindex]');
+
+  if ([9, 13, 32, 27].indexOf(keyCode) === -1) {
+    // Don't do work on keys we don't care about.
+    return;
+  }
+
+  var $targetElement = e.target || e.srcElement;
+
+  var btnIndex = -1; // Find the button - note, this is a nodelist, not an array.
+  for (var i = 0; i < $modalButtons.length; i++) {
+    if ($targetElement === $modalButtons[i]) {
+      btnIndex = i;
+      break;
+    }
+  }
+
+  if (keyCode === 9) {
+    // TAB
+    if (btnIndex === -1) {
+      // No button focused. Jump to the confirm button.
+      $targetElement = $okButton;
+    } else {
+      // Cycle to the next button
+      if (btnIndex === $modalButtons.length - 1) {
+        $targetElement = $modalButtons[0];
+      } else {
+        $targetElement = $modalButtons[btnIndex + 1];
+      }
+    }
+
+    (0, _handleDom.stopEventPropagation)(e);
+    $targetElement.focus();
+
+    if (params.confirmButtonColor) {
+      (0, _handleSwalDom.setFocusStyle)($targetElement, params.confirmButtonColor);
+    }
+  } else {
+    if (keyCode === 13) {
+      if ($targetElement.tagName === 'INPUT') {
+        $targetElement = $okButton;
+        $okButton.focus();
+      }
+
+      if (btnIndex === -1) {
+        // ENTER/SPACE clicked outside of a button.
+        $targetElement = $okButton;
+      } else {
+        // Do nothing - let the browser handle it.
+        $targetElement = undefined;
+      }
+    } else if (keyCode === 27 && params.allowEscapeKey === true) {
+      $targetElement = $cancelButton;
+      (0, _handleDom.fireClick)($targetElement, e);
+    } else {
+      // Fallback - let the browser handle it.
+      $targetElement = undefined;
+    }
+  }
+};
+
+exports.default = handleKeyDown;
+
+},{"./handle-dom":3,"./handle-swal-dom":5}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fixVerticalPosition = exports.resetInputError = exports.resetInput = exports.openModal = exports.getInput = exports.getOverlay = exports.getModal = exports.sweetAlertInitialize = undefined;
+
+var _handleDom = require('./handle-dom');
+
+var _defaultParams = require('./default-params');
+
+var _defaultParams2 = _interopRequireDefault(_defaultParams);
+
+var _injectedHtml = require('./injected-html');
+
+var _injectedHtml2 = _interopRequireDefault(_injectedHtml);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var modalClass = '.sweet-alert';
+var overlayClass = '.sweet-overlay';
+
+/*
+ * Add modal + overlay to DOM
+ */
+
+
+var sweetAlertInitialize = function sweetAlertInitialize() {
+  var sweetWrap = document.createElement('div');
+  sweetWrap.innerHTML = _injectedHtml2.default;
+
+  // Append elements to body
+  while (sweetWrap.firstChild) {
+    document.body.appendChild(sweetWrap.firstChild);
+  }
+};
+
+/*
+ * Get DOM element of modal
+ */
+var getModal = function getModal() {
+  var $modal = document.querySelector(modalClass);
+
+  if (!$modal) {
+    sweetAlertInitialize();
+    $modal = getModal();
+  }
+
+  return $modal;
+};
+
+/*
+ * Get DOM element of input (in modal)
+ */
+var getInput = function getInput() {
+  var $modal = getModal();
+  if ($modal) {
+    return $modal.querySelector('input');
+  }
+};
+
+/*
+ * Get DOM element of overlay
+ */
+var getOverlay = function getOverlay() {
+  return document.querySelector(overlayClass);
+};
+
+/*
+ * Animation when opening modal
+ */
+var openModal = function openModal(callback) {
+  var $modal = getModal();
+  (0, _handleDom.fadeIn)(getOverlay(), 10);
+  (0, _handleDom.show)($modal);
+  (0, _handleDom.addClass)($modal, 'showSweetAlert');
+  (0, _handleDom.removeClass)($modal, 'hideSweetAlert');
+
+  window.previousActiveElement = document.activeElement;
+  var $okButton = $modal.querySelector('button.confirm');
+  $okButton.focus();
+
+  setTimeout(function () {
+    (0, _handleDom.addClass)($modal, 'visible');
+  }, 500);
+
+  var timer = $modal.getAttribute('data-timer');
+
+  if (timer !== 'null' && timer !== '') {
+    var timerCallback = callback;
+    $modal.timeout = setTimeout(function () {
+      var doneFunctionExists = (timerCallback || null) && $modal.getAttribute('data-has-done-function') === 'true';
+      if (doneFunctionExists) {
+        timerCallback(null);
+      } else {
+        sweetAlert.close();
+      }
+    }, timer);
+  }
+};
+
+/*
+ * Reset the styling of the input
+ * (for example if errors have been shown)
+ */
+var resetInput = function resetInput() {
+  var $modal = getModal();
+  var $input = getInput();
+
+  (0, _handleDom.removeClass)($modal, 'show-input');
+  $input.value = _defaultParams2.default.inputValue;
+  $input.setAttribute('type', _defaultParams2.default.inputType);
+  $input.setAttribute('placeholder', _defaultParams2.default.inputPlaceholder);
+
+  resetInputError();
+};
+
+var resetInputError = function resetInputError(event) {
+  // If press enter => ignore
+  if (event && event.keyCode === 13) {
+    return false;
+  }
+
+  var $modal = getModal();
+
+  var $errorIcon = $modal.querySelector('.sa-input-error');
+  (0, _handleDom.removeClass)($errorIcon, 'show');
+
+  var $errorContainer = $modal.querySelector('.form-group');
+  (0, _handleDom.removeClass)($errorContainer, 'has-error');
+};
+
+/*
+ * Set "margin-top"-property on modal based on its computed height
+ */
+var fixVerticalPosition = function fixVerticalPosition() {
+  var $modal = getModal();
+  $modal.style.marginTop = (0, _handleDom.getTopMargin)(getModal());
+};
+
+exports.sweetAlertInitialize = sweetAlertInitialize;
+exports.getModal = getModal;
+exports.getOverlay = getOverlay;
+exports.getInput = getInput;
+exports.openModal = openModal;
+exports.resetInput = resetInput;
+exports.resetInputError = resetInputError;
+exports.fixVerticalPosition = fixVerticalPosition;
+
+},{"./default-params":1,"./handle-dom":3,"./injected-html":6}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var injectedHTML =
+
+// Dark overlay
+"<div class=\"sweet-overlay\" tabIndex=\"-1\"></div>" +
+
+// Modal
+"<div class=\"sweet-alert\" tabIndex=\"-1\">" +
+
+// Error icon
+"<div class=\"sa-icon sa-error\">\n      <span class=\"sa-x-mark\">\n        <span class=\"sa-line sa-left\"></span>\n        <span class=\"sa-line sa-right\"></span>\n      </span>\n    </div>" +
+
+// Warning icon
+"<div class=\"sa-icon sa-warning\">\n      <span class=\"sa-body\"></span>\n      <span class=\"sa-dot\"></span>\n    </div>" +
+
+// Info icon
+"<div class=\"sa-icon sa-info\"></div>" +
+
+// Success icon
+"<div class=\"sa-icon sa-success\">\n      <span class=\"sa-line sa-tip\"></span>\n      <span class=\"sa-line sa-long\"></span>\n\n      <div class=\"sa-placeholder\"></div>\n      <div class=\"sa-fix\"></div>\n    </div>" + "<div class=\"sa-icon sa-custom\"></div>" +
+
+// Title, text and input
+"<h2>Title</h2>\n    <p class=\"lead text-muted\">Text</p>\n    <div class=\"form-group\">\n      <input type=\"text\" class=\"form-control\" tabIndex=\"3\" />\n      <span class=\"sa-input-error help-block\">\n        <span class=\"glyphicon glyphicon-exclamation-sign\"></span> <span class=\"sa-help-text\">Not valid</span>\n      </span>\n    </div>" +
+
+// Cancel and confirm buttons
+"<div class=\"sa-button-container\">\n      <button class=\"cancel btn btn-lg\" tabIndex=\"2\">Cancel</button>\n      <div class=\"sa-confirm-button-container\">\n        <button class=\"confirm btn btn-lg\" tabIndex=\"1\">OK</button>" +
+
+// Loading animation
+"<div class=\"la-ball-fall\">\n          <div></div>\n          <div></div>\n          <div></div>\n        </div>\n      </div>\n    </div>" +
+
+// End of modal
+"</div>";
+
+exports.default = injectedHTML;
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var _utils = require('./utils');
+
+var _handleSwalDom = require('./handle-swal-dom');
+
+var _handleDom = require('./handle-dom');
+
+var alertTypes = ['error', 'warning', 'info', 'success', 'input', 'prompt'];
+
+/*
+ * Set type, text and actions on modal
+ */
+var setParameters = function setParameters(params) {
+  var modal = (0, _handleSwalDom.getModal)();
+
+  var $title = modal.querySelector('h2');
+  var $text = modal.querySelector('p');
+  var $cancelBtn = modal.querySelector('button.cancel');
+  var $confirmBtn = modal.querySelector('button.confirm');
+
+  /*
+   * Title
+   */
+  $title.innerHTML = params.html ? params.title : (0, _handleDom.escapeHtml)(params.title).split('\n').join('<br>');
+
+  /*
+   * Text
+   */
+  $text.innerHTML = params.html ? params.text : (0, _handleDom.escapeHtml)(params.text || '').split('\n').join('<br>');
+  if (params.text) (0, _handleDom.show)($text);
+
+  /*
+   * Custom class
+   */
+  if (params.customClass) {
+    (0, _handleDom.addClass)(modal, params.customClass);
+    modal.setAttribute('data-custom-class', params.customClass);
+  } else {
+    // Find previously set classes and remove them
+    var customClass = modal.getAttribute('data-custom-class');
+    (0, _handleDom.removeClass)(modal, customClass);
+    modal.setAttribute('data-custom-class', '');
+  }
+
+  /*
+   * Icon
+   */
+  (0, _handleDom.hide)(modal.querySelectorAll('.sa-icon'));
+
+  if (params.type && !(0, _utils.isIE8)()) {
+    var _ret = function () {
+
+      var validType = false;
+
+      for (var i = 0; i < alertTypes.length; i++) {
+        if (params.type === alertTypes[i]) {
+          validType = true;
+          break;
+        }
+      }
+
+      if (!validType) {
+        logStr('Unknown alert type: ' + params.type);
+        return {
+          v: false
+        };
+      }
+
+      var typesWithIcons = ['success', 'error', 'warning', 'info'];
+      var $icon = void 0;
+
+      if (typesWithIcons.indexOf(params.type) !== -1) {
+        $icon = modal.querySelector('.sa-icon.' + 'sa-' + params.type);
+        (0, _handleDom.show)($icon);
+      }
+
+      var $input = (0, _handleSwalDom.getInput)();
+
+      // Animate icon
+      switch (params.type) {
+
+        case 'success':
+          (0, _handleDom.addClass)($icon, 'animate');
+          (0, _handleDom.addClass)($icon.querySelector('.sa-tip'), 'animateSuccessTip');
+          (0, _handleDom.addClass)($icon.querySelector('.sa-long'), 'animateSuccessLong');
+          break;
+
+        case 'error':
+          (0, _handleDom.addClass)($icon, 'animateErrorIcon');
+          (0, _handleDom.addClass)($icon.querySelector('.sa-x-mark'), 'animateXMark');
+          break;
+
+        case 'warning':
+          (0, _handleDom.addClass)($icon, 'pulseWarning');
+          (0, _handleDom.addClass)($icon.querySelector('.sa-body'), 'pulseWarningIns');
+          (0, _handleDom.addClass)($icon.querySelector('.sa-dot'), 'pulseWarningIns');
+          break;
+
+        case 'input':
+        case 'prompt':
+          $input.setAttribute('type', params.inputType);
+          $input.value = params.inputValue;
+          $input.setAttribute('placeholder', params.inputPlaceholder);
+          (0, _handleDom.addClass)(modal, 'show-input');
+          setTimeout(function () {
+            $input.focus();
+            $input.addEventListener('keyup', swal.resetInputError);
+          }, 400);
+          break;
+      }
+    }();
+
+    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+  }
+
+  /*
+   * Custom image
+   */
+  if (params.imageUrl) {
+    var $customIcon = modal.querySelector('.sa-icon.sa-custom');
+
+    $customIcon.style.backgroundImage = 'url(' + params.imageUrl + ')';
+    (0, _handleDom.show)($customIcon);
+
+    var _imgWidth = 80;
+    var _imgHeight = 80;
+
+    if (params.imageSize) {
+      var dimensions = params.imageSize.toString().split('x');
+      var imgWidth = dimensions[0];
+      var imgHeight = dimensions[1];
+
+      if (!imgWidth || !imgHeight) {
+        logStr('Parameter imageSize expects value with format WIDTHxHEIGHT, got ' + params.imageSize);
+      } else {
+        _imgWidth = imgWidth;
+        _imgHeight = imgHeight;
+      }
+    }
+
+    $customIcon.setAttribute('style', $customIcon.getAttribute('style') + 'width:' + _imgWidth + 'px; height:' + _imgHeight + 'px');
+  }
+
+  /*
+   * Show cancel button?
+   */
+  modal.setAttribute('data-has-cancel-button', params.showCancelButton);
+  if (params.showCancelButton) {
+    $cancelBtn.style.display = 'inline-block';
+  } else {
+    (0, _handleDom.hide)($cancelBtn);
+  }
+
+  /*
+   * Show confirm button?
+   */
+  modal.setAttribute('data-has-confirm-button', params.showConfirmButton);
+  if (params.showConfirmButton) {
+    $confirmBtn.style.display = 'inline-block';
+  } else {
+    (0, _handleDom.hide)($confirmBtn);
+  }
+
+  /*
+   * Custom text on cancel/confirm buttons
+   */
+  if (params.cancelButtonText) {
+    $cancelBtn.innerHTML = (0, _handleDom.escapeHtml)(params.cancelButtonText);
+  }
+  if (params.confirmButtonText) {
+    $confirmBtn.innerHTML = (0, _handleDom.escapeHtml)(params.confirmButtonText);
+  }
+
+  /*
+   * Reset confirm buttons to default class (Ugly fix)
+   */
+  $confirmBtn.className = 'confirm btn btn-lg';
+
+  /*
+   * Attach selected class to the sweet alert modal
+   */
+  (0, _handleDom.addClass)(modal, params.containerClass);
+
+  /*
+   * Set confirm button to selected class
+   */
+  (0, _handleDom.addClass)($confirmBtn, params.confirmButtonClass);
+
+  /*
+   * Set cancel button to selected class
+   */
+  (0, _handleDom.addClass)($cancelBtn, params.cancelButtonClass);
+
+  /*
+   * Set title to selected class
+   */
+  (0, _handleDom.addClass)($title, params.titleClass);
+
+  /*
+   * Set text to selected class
+   */
+  (0, _handleDom.addClass)($text, params.textClass);
+
+  /*
+   * Allow outside click
+   */
+  modal.setAttribute('data-allow-outside-click', params.allowOutsideClick);
+
+  /*
+   * Callback function
+   */
+  var hasDoneFunction = params.doneFunction ? true : false;
+  modal.setAttribute('data-has-done-function', hasDoneFunction);
+
+  /*
+   * Animation
+   */
+  if (!params.animation) {
+    modal.setAttribute('data-animation', 'none');
+  } else if (typeof params.animation === 'string') {
+    modal.setAttribute('data-animation', params.animation); // Custom animation
+  } else {
+      modal.setAttribute('data-animation', 'pop');
+    }
+
+  /*
+   * Timer
+   */
+  modal.setAttribute('data-timer', params.timer);
+};
+
+exports.default = setParameters;
+
+},{"./handle-dom":3,"./handle-swal-dom":5,"./utils":8}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/*
+ * Allow user to pass their own params
+ */
+var extend = function extend(a, b) {
+  for (var key in b) {
+    if (b.hasOwnProperty(key)) {
+      a[key] = b[key];
+    }
+  }
+  return a;
+};
+
+/*
+ * Check if the user is using Internet Explorer 8 (for fallbacks)
+ */
+var isIE8 = function isIE8() {
+  return window.attachEvent && !window.addEventListener;
+};
+
+/*
+ * IE compatible logging for developers
+ */
+var logStr = function logStr(string) {
+  if (window.console) {
+    // IE...
+    window.console.log('SweetAlert: ' + string);
+  }
+};
+
+exports.extend = extend;
+exports.isIE8 = isIE8;
+exports.logStr = logStr;
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; // SweetAlert
+// 2014-2015 (c) - Tristan Edwards
+// github.com/t4t5/sweetalert
+
+/*
+ * jQuery-like functions for manipulating the DOM
+ */
+
+
+/*
+ * Handy utilities
+ */
+
+
+/*
+ *  Handle sweetAlert's DOM elements
+ */
+
+
+// Handle button events and keyboard events
+
+
+// Default values
+
+
+var _handleDom = require('./modules/handle-dom');
+
+var _utils = require('./modules/utils');
+
+var _handleSwalDom = require('./modules/handle-swal-dom');
+
+var _handleClick = require('./modules/handle-click');
+
+var _handleKey = require('./modules/handle-key');
+
+var _handleKey2 = _interopRequireDefault(_handleKey);
+
+var _defaultParams = require('./modules/default-params');
+
+var _defaultParams2 = _interopRequireDefault(_defaultParams);
+
+var _setParams = require('./modules/set-params');
+
+var _setParams2 = _interopRequireDefault(_setParams);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * Remember state in cases where opening and handling a modal will fiddle with it.
+ * (We also use window.previousActiveElement as a global variable)
+ */
+var previousWindowKeyDown;
+var lastFocusedButton;
+
+/*
+ * Global sweetAlert function
+ * (this is what the user calls)
+ */
+var sweetAlert, _swal;
+
+exports.default = sweetAlert = _swal = function swal() {
+  var customizations = arguments[0];
+
+  (0, _handleDom.addClass)(document.body, 'stop-scrolling');
+  (0, _handleSwalDom.resetInput)();
+
+  /*
+   * Use argument if defined or default value from params object otherwise.
+   * Supports the case where a default value is boolean true and should be
+   * overridden by a corresponding explicit argument which is boolean false.
+   */
+  function argumentOrDefault(key) {
+    var args = customizations;
+    return args[key] === undefined ? _defaultParams2.default[key] : args[key];
+  }
+
+  if (customizations === undefined) {
+    (0, _utils.logStr)('SweetAlert expects at least 1 attribute!');
+    return false;
+  }
+
+  var params = (0, _utils.extend)({}, _defaultParams2.default);
+
+  switch (typeof customizations === 'undefined' ? 'undefined' : _typeof(customizations)) {
+
+    // Ex: swal("Hello", "Just testing", "info");
+    case 'string':
+      params.title = customizations;
+      params.text = arguments[1] || '';
+      params.type = arguments[2] || '';
+      break;
+
+    // Ex: swal({ title:"Hello", text: "Just testing", type: "info" });
+    case 'object':
+      if (customizations.title === undefined) {
+        (0, _utils.logStr)('Missing "title" argument!');
+        return false;
+      }
+
+      params.title = customizations.title;
+
+      for (var customName in _defaultParams2.default) {
+        params[customName] = argumentOrDefault(customName);
+      }
+
+      // Show "Confirm" instead of "OK" if cancel button is visible
+      params.confirmButtonText = params.showCancelButton ? 'Confirm' : _defaultParams2.default.confirmButtonText;
+      params.confirmButtonText = argumentOrDefault('confirmButtonText');
+
+      // Callback function when clicking on "OK"/"Cancel"
+      params.doneFunction = arguments[1] || null;
+
+      break;
+
+    default:
+      (0, _utils.logStr)('Unexpected type of argument! Expected "string" or "object", got ' + (typeof customizations === 'undefined' ? 'undefined' : _typeof(customizations)));
+      return false;
+
+  }
+
+  (0, _setParams2.default)(params);
+  (0, _handleSwalDom.fixVerticalPosition)();
+  (0, _handleSwalDom.openModal)(arguments[1]);
+
+  // Modal interactions
+  var modal = (0, _handleSwalDom.getModal)();
+
+  /*
+   * Make sure all modal buttons respond to all events
+   */
+  var $buttons = modal.querySelectorAll('button');
+  var buttonEvents = ['onclick'];
+  var onButtonEvent = function onButtonEvent(e) {
+    return (0, _handleClick.handleButton)(e, params, modal);
+  };
+
+  for (var btnIndex = 0; btnIndex < $buttons.length; btnIndex++) {
+    for (var evtIndex = 0; evtIndex < buttonEvents.length; evtIndex++) {
+      var btnEvt = buttonEvents[evtIndex];
+      $buttons[btnIndex][btnEvt] = onButtonEvent;
+    }
+  }
+
+  // Clicking outside the modal dismisses it (if allowed by user)
+  (0, _handleSwalDom.getOverlay)().onclick = onButtonEvent;
+
+  previousWindowKeyDown = window.onkeydown;
+
+  var onKeyEvent = function onKeyEvent(e) {
+    return (0, _handleKey2.default)(e, params, modal);
+  };
+  window.onkeydown = onKeyEvent;
+
+  window.onfocus = function () {
+    // When the user has focused away and focused back from the whole window.
+    setTimeout(function () {
+      // Put in a timeout to jump out of the event sequence.
+      // Calling focus() in the event sequence confuses things.
+      if (lastFocusedButton !== undefined) {
+        lastFocusedButton.focus();
+        lastFocusedButton = undefined;
+      }
+    }, 0);
+  };
+
+  // Show alert with enabled buttons always
+  _swal.enableButtons();
+};
+
+/*
+ * Set default params for each popup
+ * @param {Object} userParams
+ */
+
+
+sweetAlert.setDefaults = _swal.setDefaults = function (userParams) {
+  if (!userParams) {
+    throw new Error('userParams is required');
+  }
+  if ((typeof userParams === 'undefined' ? 'undefined' : _typeof(userParams)) !== 'object') {
+    throw new Error('userParams has to be a object');
+  }
+
+  (0, _utils.extend)(_defaultParams2.default, userParams);
+};
+
+/*
+ * Animation when closing modal
+ */
+sweetAlert.close = _swal.close = function () {
+  var modal = (0, _handleSwalDom.getModal)();
+
+  (0, _handleDom.fadeOut)((0, _handleSwalDom.getOverlay)(), 5);
+  (0, _handleDom.fadeOut)(modal, 5);
+  (0, _handleDom.removeClass)(modal, 'showSweetAlert');
+  (0, _handleDom.addClass)(modal, 'hideSweetAlert');
+  (0, _handleDom.removeClass)(modal, 'visible');
+
+  /*
+   * Reset icon animations
+   */
+  var $successIcon = modal.querySelector('.sa-icon.sa-success');
+  (0, _handleDom.removeClass)($successIcon, 'animate');
+  (0, _handleDom.removeClass)($successIcon.querySelector('.sa-tip'), 'animateSuccessTip');
+  (0, _handleDom.removeClass)($successIcon.querySelector('.sa-long'), 'animateSuccessLong');
+
+  var $errorIcon = modal.querySelector('.sa-icon.sa-error');
+  (0, _handleDom.removeClass)($errorIcon, 'animateErrorIcon');
+  (0, _handleDom.removeClass)($errorIcon.querySelector('.sa-x-mark'), 'animateXMark');
+
+  var $warningIcon = modal.querySelector('.sa-icon.sa-warning');
+  (0, _handleDom.removeClass)($warningIcon, 'pulseWarning');
+  (0, _handleDom.removeClass)($warningIcon.querySelector('.sa-body'), 'pulseWarningIns');
+  (0, _handleDom.removeClass)($warningIcon.querySelector('.sa-dot'), 'pulseWarningIns');
+
+  // Reset custom class (delay so that UI changes aren't visible)
+  setTimeout(function () {
+    var customClass = modal.getAttribute('data-custom-class');
+    (0, _handleDom.removeClass)(modal, customClass);
+  }, 300);
+
+  // Make page scrollable again
+  (0, _handleDom.removeClass)(document.body, 'stop-scrolling');
+
+  // Reset the page to its previous state
+  window.onkeydown = previousWindowKeyDown;
+  if (window.previousActiveElement) {
+    window.previousActiveElement.focus();
+  }
+  lastFocusedButton = undefined;
+  clearTimeout(modal.timeout);
+
+  return true;
+};
+
+/*
+ * Validation of the input field is done by user
+ * If something is wrong => call showInputError with errorMessage
+ */
+sweetAlert.showInputError = _swal.showInputError = function (errorMessage) {
+  var modal = (0, _handleSwalDom.getModal)();
+
+  var $errorIcon = modal.querySelector('.sa-input-error');
+  (0, _handleDom.addClass)($errorIcon, 'show');
+
+  var $errorContainer = modal.querySelector('.form-group');
+  (0, _handleDom.addClass)($errorContainer, 'has-error');
+
+  $errorContainer.querySelector('.sa-help-text').innerHTML = errorMessage;
+
+  setTimeout(function () {
+    sweetAlert.enableButtons();
+  }, 1);
+
+  modal.querySelector('input').focus();
+};
+
+/*
+ * Reset input error DOM elements
+ */
+sweetAlert.resetInputError = _swal.resetInputError = function (event) {
+  // If press enter => ignore
+  if (event && event.keyCode === 13) {
+    return false;
+  }
+
+  var $modal = (0, _handleSwalDom.getModal)();
+
+  var $errorIcon = $modal.querySelector('.sa-input-error');
+  (0, _handleDom.removeClass)($errorIcon, 'show');
+
+  var $errorContainer = $modal.querySelector('.form-group');
+  (0, _handleDom.removeClass)($errorContainer, 'has-error');
+};
+
+/*
+ * Disable confirm and cancel buttons
+ */
+sweetAlert.disableButtons = _swal.disableButtons = function (event) {
+  var modal = (0, _handleSwalDom.getModal)();
+  var $confirmButton = modal.querySelector('button.confirm');
+  var $cancelButton = modal.querySelector('button.cancel');
+  $confirmButton.disabled = true;
+  $cancelButton.disabled = true;
+};
+
+/*
+ * Enable confirm and cancel buttons
+ */
+sweetAlert.enableButtons = _swal.enableButtons = function (event) {
+  var modal = (0, _handleSwalDom.getModal)();
+  var $confirmButton = modal.querySelector('button.confirm');
+  var $cancelButton = modal.querySelector('button.cancel');
+  $confirmButton.disabled = false;
+  $cancelButton.disabled = false;
+};
+
+if (typeof window !== 'undefined') {
+  // The 'handle-click' module requires
+  // that 'sweetAlert' was set as global.
+  window.sweetAlert = window.swal = sweetAlert;
+} else {
+  (0, _utils.logStr)('SweetAlert is a frontend module!');
+}
+
+},{"./modules/default-params":1,"./modules/handle-click":2,"./modules/handle-dom":3,"./modules/handle-key":4,"./modules/handle-swal-dom":5,"./modules/set-params":7,"./modules/utils":8}]},{},[9]);
+
+/*
+ * Use SweetAlert with RequireJS
+ */
+
+if (true) {
+  !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+    return sweetAlert;
+  }).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+} else {}
+
+})(window, document);
 
 /***/ }),
 
@@ -30083,6 +31352,25 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/bootstrap-sweetalert/dist/sweetalert.css":
+/*!***********************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/bootstrap-sweetalert/dist/sweetalert.css ***!
+  \***********************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "@-webkit-keyframes showSweetAlert {\n  0% {\n    transform: scale(0.7);\n  }\n  45% {\n    transform: scale(1.05);\n  }\n  80% {\n    transform: scale(0.95);\n  }\n  100% {\n    transform: scale(1);\n  }\n}\n@keyframes showSweetAlert {\n  0% {\n    transform: scale(0.7);\n  }\n  45% {\n    transform: scale(1.05);\n  }\n  80% {\n    transform: scale(0.95);\n  }\n  100% {\n    transform: scale(1);\n  }\n}\n@-webkit-keyframes hideSweetAlert {\n  0% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.5);\n  }\n}\n@keyframes hideSweetAlert {\n  0% {\n    transform: scale(1);\n  }\n  100% {\n    transform: scale(0.5);\n  }\n}\n@-webkit-keyframes slideFromTop {\n  0% {\n    top: 0%;\n  }\n  100% {\n    top: 50%;\n  }\n}\n@keyframes slideFromTop {\n  0% {\n    top: 0%;\n  }\n  100% {\n    top: 50%;\n  }\n}\n@-webkit-keyframes slideToTop {\n  0% {\n    top: 50%;\n  }\n  100% {\n    top: 0%;\n  }\n}\n@keyframes slideToTop {\n  0% {\n    top: 50%;\n  }\n  100% {\n    top: 0%;\n  }\n}\n@-webkit-keyframes slideFromBottom {\n  0% {\n    top: 70%;\n  }\n  100% {\n    top: 50%;\n  }\n}\n@keyframes slideFromBottom {\n  0% {\n    top: 70%;\n  }\n  100% {\n    top: 50%;\n  }\n}\n@-webkit-keyframes slideToBottom {\n  0% {\n    top: 50%;\n  }\n  100% {\n    top: 70%;\n  }\n}\n@keyframes slideToBottom {\n  0% {\n    top: 50%;\n  }\n  100% {\n    top: 70%;\n  }\n}\n.showSweetAlert {\n  -webkit-animation: showSweetAlert 0.3s;\n          animation: showSweetAlert 0.3s;\n}\n.showSweetAlert[data-animation=none] {\n  -webkit-animation: none;\n          animation: none;\n}\n.showSweetAlert[data-animation=slide-from-top] {\n  -webkit-animation: slideFromTop 0.3s;\n          animation: slideFromTop 0.3s;\n}\n.showSweetAlert[data-animation=slide-from-bottom] {\n  -webkit-animation: slideFromBottom 0.3s;\n          animation: slideFromBottom 0.3s;\n}\n.hideSweetAlert {\n  -webkit-animation: hideSweetAlert 0.3s;\n          animation: hideSweetAlert 0.3s;\n}\n.hideSweetAlert[data-animation=none] {\n  -webkit-animation: none;\n          animation: none;\n}\n.hideSweetAlert[data-animation=slide-from-top] {\n  -webkit-animation: slideToTop 0.3s;\n          animation: slideToTop 0.3s;\n}\n.hideSweetAlert[data-animation=slide-from-bottom] {\n  -webkit-animation: slideToBottom 0.3s;\n          animation: slideToBottom 0.3s;\n}\n@-webkit-keyframes animateSuccessTip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 19px;\n  }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 19px;\n  }\n  70% {\n    width: 50px;\n    left: -8px;\n    top: 37px;\n  }\n  84% {\n    width: 17px;\n    left: 21px;\n    top: 48px;\n  }\n  100% {\n    width: 25px;\n    left: 14px;\n    top: 45px;\n  }\n}\n@keyframes animateSuccessTip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 19px;\n  }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 19px;\n  }\n  70% {\n    width: 50px;\n    left: -8px;\n    top: 37px;\n  }\n  84% {\n    width: 17px;\n    left: 21px;\n    top: 48px;\n  }\n  100% {\n    width: 25px;\n    left: 14px;\n    top: 45px;\n  }\n}\n@-webkit-keyframes animateSuccessLong {\n  0% {\n    width: 0;\n    right: 46px;\n    top: 54px;\n  }\n  65% {\n    width: 0;\n    right: 46px;\n    top: 54px;\n  }\n  84% {\n    width: 55px;\n    right: 0px;\n    top: 35px;\n  }\n  100% {\n    width: 47px;\n    right: 8px;\n    top: 38px;\n  }\n}\n@keyframes animateSuccessLong {\n  0% {\n    width: 0;\n    right: 46px;\n    top: 54px;\n  }\n  65% {\n    width: 0;\n    right: 46px;\n    top: 54px;\n  }\n  84% {\n    width: 55px;\n    right: 0px;\n    top: 35px;\n  }\n  100% {\n    width: 47px;\n    right: 8px;\n    top: 38px;\n  }\n}\n@-webkit-keyframes rotatePlaceholder {\n  0% {\n    transform: rotate(-45deg);\n  }\n  5% {\n    transform: rotate(-45deg);\n  }\n  12% {\n    transform: rotate(-405deg);\n  }\n  100% {\n    transform: rotate(-405deg);\n  }\n}\n@keyframes rotatePlaceholder {\n  0% {\n    transform: rotate(-45deg);\n  }\n  5% {\n    transform: rotate(-45deg);\n  }\n  12% {\n    transform: rotate(-405deg);\n  }\n  100% {\n    transform: rotate(-405deg);\n  }\n}\n.animateSuccessTip {\n  -webkit-animation: animateSuccessTip 0.75s;\n          animation: animateSuccessTip 0.75s;\n}\n.animateSuccessLong {\n  -webkit-animation: animateSuccessLong 0.75s;\n          animation: animateSuccessLong 0.75s;\n}\n.sa-icon.sa-success.animate::after {\n  -webkit-animation: rotatePlaceholder 4.25s ease-in;\n          animation: rotatePlaceholder 4.25s ease-in;\n}\n@-webkit-keyframes animateErrorIcon {\n  0% {\n    transform: rotateX(100deg);\n    opacity: 0;\n  }\n  100% {\n    transform: rotateX(0deg);\n    opacity: 1;\n  }\n}\n@keyframes animateErrorIcon {\n  0% {\n    transform: rotateX(100deg);\n    opacity: 0;\n  }\n  100% {\n    transform: rotateX(0deg);\n    opacity: 1;\n  }\n}\n.animateErrorIcon {\n  -webkit-animation: animateErrorIcon 0.5s;\n          animation: animateErrorIcon 0.5s;\n}\n@-webkit-keyframes animateXMark {\n  0% {\n    transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0;\n  }\n  50% {\n    transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0;\n  }\n  80% {\n    transform: scale(1.15);\n    margin-top: -6px;\n  }\n  100% {\n    transform: scale(1);\n    margin-top: 0;\n    opacity: 1;\n  }\n}\n@keyframes animateXMark {\n  0% {\n    transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0;\n  }\n  50% {\n    transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0;\n  }\n  80% {\n    transform: scale(1.15);\n    margin-top: -6px;\n  }\n  100% {\n    transform: scale(1);\n    margin-top: 0;\n    opacity: 1;\n  }\n}\n.animateXMark {\n  -webkit-animation: animateXMark 0.5s;\n          animation: animateXMark 0.5s;\n}\n@-webkit-keyframes pulseWarning {\n  0% {\n    border-color: #F8D486;\n  }\n  100% {\n    border-color: #F8BB86;\n  }\n}\n@keyframes pulseWarning {\n  0% {\n    border-color: #F8D486;\n  }\n  100% {\n    border-color: #F8BB86;\n  }\n}\n.pulseWarning {\n  -webkit-animation: pulseWarning 0.75s infinite alternate;\n          animation: pulseWarning 0.75s infinite alternate;\n}\n@-webkit-keyframes pulseWarningIns {\n  0% {\n    background-color: #F8D486;\n  }\n  100% {\n    background-color: #F8BB86;\n  }\n}\n@keyframes pulseWarningIns {\n  0% {\n    background-color: #F8D486;\n  }\n  100% {\n    background-color: #F8BB86;\n  }\n}\n.pulseWarningIns {\n  -webkit-animation: pulseWarningIns 0.75s infinite alternate;\n          animation: pulseWarningIns 0.75s infinite alternate;\n}\n@-webkit-keyframes rotate-loading {\n  0% {\n    transform: rotate(0deg);\n  }\n  100% {\n    transform: rotate(360deg);\n  }\n}\n@keyframes rotate-loading {\n  0% {\n    transform: rotate(0deg);\n  }\n  100% {\n    transform: rotate(360deg);\n  }\n}\nbody.stop-scrolling {\n  height: 100%;\n  overflow: hidden;\n}\n.sweet-overlay {\n  background-color: rgba(0, 0, 0, 0.4);\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  display: none;\n  z-index: 1040;\n}\n.sweet-alert {\n  background-color: #ffffff;\n  width: 478px;\n  padding: 17px;\n  border-radius: 5px;\n  text-align: center;\n  position: fixed;\n  left: 50%;\n  top: 50%;\n  margin-left: -256px;\n  margin-top: -200px;\n  overflow: hidden;\n  display: none;\n  z-index: 2000;\n}\n@media all and (max-width: 767px) {\n  .sweet-alert {\n    width: auto;\n    margin-left: 0;\n    margin-right: 0;\n    left: 15px;\n    right: 15px;\n  }\n}\n.sweet-alert .form-group {\n  display: none;\n}\n.sweet-alert .form-group .sa-input-error {\n  display: none;\n}\n.sweet-alert.show-input .form-group {\n  display: block;\n}\n.sweet-alert .sa-confirm-button-container {\n  display: inline-block;\n  position: relative;\n}\n.sweet-alert .la-ball-fall {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  margin-left: -27px;\n  margin-top: -9px;\n  opacity: 0;\n  visibility: hidden;\n}\n.sweet-alert button[disabled] {\n  opacity: .6;\n  cursor: default;\n}\n.sweet-alert button.confirm[disabled] {\n  color: transparent;\n}\n.sweet-alert button.confirm[disabled] ~ .la-ball-fall {\n  opacity: 1;\n  visibility: visible;\n  transition-delay: 0s;\n}\n.sweet-alert .sa-icon {\n  width: 80px;\n  height: 80px;\n  border: 4px solid gray;\n  border-radius: 50%;\n  margin: 20px auto;\n  position: relative;\n  box-sizing: content-box;\n}\n.sweet-alert .sa-icon.sa-error {\n  border-color: #d43f3a;\n}\n.sweet-alert .sa-icon.sa-error .sa-x-mark {\n  position: relative;\n  display: block;\n}\n.sweet-alert .sa-icon.sa-error .sa-line {\n  position: absolute;\n  height: 5px;\n  width: 47px;\n  background-color: #d9534f;\n  display: block;\n  top: 37px;\n  border-radius: 2px;\n}\n.sweet-alert .sa-icon.sa-error .sa-line.sa-left {\n  transform: rotate(45deg);\n  left: 17px;\n}\n.sweet-alert .sa-icon.sa-error .sa-line.sa-right {\n  transform: rotate(-45deg);\n  right: 16px;\n}\n.sweet-alert .sa-icon.sa-warning {\n  border-color: #eea236;\n}\n.sweet-alert .sa-icon.sa-warning .sa-body {\n  position: absolute;\n  width: 5px;\n  height: 47px;\n  left: 50%;\n  top: 10px;\n  border-radius: 2px;\n  margin-left: -2px;\n  background-color: #f0ad4e;\n}\n.sweet-alert .sa-icon.sa-warning .sa-dot {\n  position: absolute;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  margin-left: -3px;\n  left: 50%;\n  bottom: 10px;\n  background-color: #f0ad4e;\n}\n.sweet-alert .sa-icon.sa-info {\n  border-color: #46b8da;\n}\n.sweet-alert .sa-icon.sa-info::before {\n  content: \"\";\n  position: absolute;\n  width: 5px;\n  height: 29px;\n  left: 50%;\n  bottom: 17px;\n  border-radius: 2px;\n  margin-left: -2px;\n  background-color: #5bc0de;\n}\n.sweet-alert .sa-icon.sa-info::after {\n  content: \"\";\n  position: absolute;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  margin-left: -3px;\n  top: 19px;\n  background-color: #5bc0de;\n}\n.sweet-alert .sa-icon.sa-success {\n  border-color: #4cae4c;\n}\n.sweet-alert .sa-icon.sa-success::before,\n.sweet-alert .sa-icon.sa-success::after {\n  content: '';\n  border-radius: 50%;\n  position: absolute;\n  width: 60px;\n  height: 120px;\n  background: #ffffff;\n  transform: rotate(45deg);\n}\n.sweet-alert .sa-icon.sa-success::before {\n  border-radius: 120px 0 0 120px;\n  top: -7px;\n  left: -33px;\n  transform: rotate(-45deg);\n  transform-origin: 60px 60px;\n}\n.sweet-alert .sa-icon.sa-success::after {\n  border-radius: 0 120px 120px 0;\n  top: -11px;\n  left: 30px;\n  transform: rotate(-45deg);\n  transform-origin: 0px 60px;\n}\n.sweet-alert .sa-icon.sa-success .sa-placeholder {\n  width: 80px;\n  height: 80px;\n  border: 4px solid rgba(92, 184, 92, 0.2);\n  border-radius: 50%;\n  box-sizing: content-box;\n  position: absolute;\n  left: -4px;\n  top: -4px;\n  z-index: 2;\n}\n.sweet-alert .sa-icon.sa-success .sa-fix {\n  width: 5px;\n  height: 90px;\n  background-color: #ffffff;\n  position: absolute;\n  left: 28px;\n  top: 8px;\n  z-index: 1;\n  transform: rotate(-45deg);\n}\n.sweet-alert .sa-icon.sa-success .sa-line {\n  height: 5px;\n  background-color: #5cb85c;\n  display: block;\n  border-radius: 2px;\n  position: absolute;\n  z-index: 2;\n}\n.sweet-alert .sa-icon.sa-success .sa-line.sa-tip {\n  width: 25px;\n  left: 14px;\n  top: 46px;\n  transform: rotate(45deg);\n}\n.sweet-alert .sa-icon.sa-success .sa-line.sa-long {\n  width: 47px;\n  right: 8px;\n  top: 38px;\n  transform: rotate(-45deg);\n}\n.sweet-alert .sa-icon.sa-custom {\n  background-size: contain;\n  border-radius: 0;\n  border: none;\n  background-position: center center;\n  background-repeat: no-repeat;\n}\n.sweet-alert .btn-default:focus {\n  border-color: #cccccc;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(204, 204, 204, 0.6);\n}\n.sweet-alert .btn-success:focus {\n  border-color: #4cae4c;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(76, 174, 76, 0.6);\n}\n.sweet-alert .btn-info:focus {\n  border-color: #46b8da;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(70, 184, 218, 0.6);\n}\n.sweet-alert .btn-danger:focus {\n  border-color: #d43f3a;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(212, 63, 58, 0.6);\n}\n.sweet-alert .btn-warning:focus {\n  border-color: #eea236;\n  outline: 0;\n  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(238, 162, 54, 0.6);\n}\n.sweet-alert button::-moz-focus-inner {\n  border: 0;\n}\n/*!\n * Load Awesome v1.1.0 (http://github.danielcardoso.net/load-awesome/)\n * Copyright 2015 Daniel Cardoso <@DanielCardoso>\n * Licensed under MIT\n */\n.la-ball-fall,\n.la-ball-fall > div {\n  position: relative;\n  box-sizing: border-box;\n}\n.la-ball-fall {\n  display: block;\n  font-size: 0;\n  color: #fff;\n}\n.la-ball-fall.la-dark {\n  color: #333;\n}\n.la-ball-fall > div {\n  display: inline-block;\n  float: none;\n  background-color: currentColor;\n  border: 0 solid currentColor;\n}\n.la-ball-fall {\n  width: 54px;\n  height: 18px;\n}\n.la-ball-fall > div {\n  width: 10px;\n  height: 10px;\n  margin: 4px;\n  border-radius: 100%;\n  opacity: 0;\n  -webkit-animation: ball-fall 1s ease-in-out infinite;\n  animation: ball-fall 1s ease-in-out infinite;\n}\n.la-ball-fall > div:nth-child(1) {\n  -webkit-animation-delay: -200ms;\n  animation-delay: -200ms;\n}\n.la-ball-fall > div:nth-child(2) {\n  -webkit-animation-delay: -100ms;\n  animation-delay: -100ms;\n}\n.la-ball-fall > div:nth-child(3) {\n  -webkit-animation-delay: 0ms;\n  animation-delay: 0ms;\n}\n.la-ball-fall.la-sm {\n  width: 26px;\n  height: 8px;\n}\n.la-ball-fall.la-sm > div {\n  width: 4px;\n  height: 4px;\n  margin: 2px;\n}\n.la-ball-fall.la-2x {\n  width: 108px;\n  height: 36px;\n}\n.la-ball-fall.la-2x > div {\n  width: 20px;\n  height: 20px;\n  margin: 8px;\n}\n.la-ball-fall.la-3x {\n  width: 162px;\n  height: 54px;\n}\n.la-ball-fall.la-3x > div {\n  width: 30px;\n  height: 30px;\n  margin: 12px;\n}\n/*\n * Animation\n */\n@-webkit-keyframes ball-fall {\n  0% {\n    opacity: 0;\n    transform: translateY(-145%);\n  }\n  10% {\n    opacity: .5;\n  }\n  20% {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  80% {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  90% {\n    opacity: .5;\n  }\n  100% {\n    opacity: 0;\n    transform: translateY(145%);\n  }\n}\n@keyframes ball-fall {\n  0% {\n    opacity: 0;\n    transform: translateY(-145%);\n  }\n  10% {\n    opacity: .5;\n  }\n  20% {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  80% {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  90% {\n    opacity: .5;\n  }\n  100% {\n    opacity: 0;\n    transform: translateY(145%);\n  }\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/bootstrap/dist/css/bootstrap.css":
 /*!***************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/bootstrap/dist/css/bootstrap.css ***!
@@ -37768,6 +39056,28 @@ module.exports = subYears
 
 /***/ }),
 
+/***/ "./node_modules/is-buffer/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/is-buffer/index.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+module.exports = function isBuffer (obj) {
+  return obj != null && obj.constructor != null &&
+    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/popper.js/dist/esm/popper.js":
 /*!***************************************************!*\
   !*** ./node_modules/popper.js/dist/esm/popper.js ***!
@@ -42053,8 +43363,7 @@ var render = function() {
                           _c("b-form-input", {
                             attrs: {
                               id: "input-1",
-                              placeholder: "Enter Title",
-                              required: ""
+                              placeholder: "Enter Title"
                             },
                             model: {
                               value: _vm.eventForm.title,
@@ -42063,7 +43372,22 @@ var render = function() {
                               },
                               expression: "eventForm.title"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c("b-form-invalid-feedback", {
+                            attrs: { state: this.eventForm.title.length > 0 },
+                            domProps: {
+                              textContent: _vm._s(_vm.eventError.title[0])
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-valid-feedback",
+                            {
+                              attrs: { state: this.eventForm.title.length > 0 }
+                            },
+                            [_vm._v("Title looks good.")]
+                          )
                         ],
                         1
                       ),
@@ -42094,7 +43418,20 @@ var render = function() {
                               },
                               expression: "eventForm.from"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c("b-form-invalid-feedback", {
+                            attrs: { state: this.eventForm.from != "" },
+                            domProps: {
+                              textContent: _vm._s(_vm.eventError.from[0])
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-valid-feedback",
+                            { attrs: { state: this.eventForm.from != "" } },
+                            [_vm._v("Start date looks good.")]
+                          )
                         ],
                         1
                       ),
@@ -42125,7 +43462,20 @@ var render = function() {
                               },
                               expression: "eventForm.to"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c("b-form-invalid-feedback", {
+                            attrs: { state: this.eventForm.to != "" },
+                            domProps: {
+                              textContent: _vm._s(_vm.eventError.to[0])
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-valid-feedback",
+                            { attrs: { state: this.eventForm.to != "" } },
+                            [_vm._v("End date looks good.")]
+                          )
                         ],
                         1
                       ),
@@ -42137,24 +43487,45 @@ var render = function() {
                           _c(
                             "b-form-checkbox-group",
                             { attrs: { id: "checkbox-group-1" } },
-                            _vm._l(_vm.weekDays, function(day, index) {
-                              return _c(
-                                "b-form-checkbox",
+                            [
+                              _vm._l(_vm.weekDays, function(day, index) {
+                                return _c(
+                                  "b-form-checkbox",
+                                  {
+                                    key: index,
+                                    attrs: { value: day },
+                                    model: {
+                                      value: _vm.eventForm.days,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.eventForm, "days", $$v)
+                                      },
+                                      expression: "eventForm.days"
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(day))]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c("b-form-invalid-feedback", {
+                                attrs: {
+                                  state: this.eventForm.days.length > 0
+                                },
+                                domProps: {
+                                  textContent: _vm._s(_vm.eventError.days[0])
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-form-valid-feedback",
                                 {
-                                  key: index,
-                                  attrs: { value: day },
-                                  model: {
-                                    value: _vm.eventForm.days,
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.eventForm, "days", $$v)
-                                    },
-                                    expression: "eventForm.days"
+                                  attrs: {
+                                    state: this.eventForm.days.length > 0
                                   }
                                 },
-                                [_vm._v(_vm._s(day))]
+                                [_vm._v("Days looks good.")]
                               )
-                            }),
-                            1
+                            ],
+                            2
                           )
                         ],
                         1
@@ -56844,7 +58215,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
 /* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ "./node_modules/bootstrap/dist/css/bootstrap.css");
 /* harmony import */ var bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var bootstrap_sweetalert_dist_sweetalert_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap-sweetalert/dist/sweetalert.js */ "./node_modules/bootstrap-sweetalert/dist/sweetalert.js");
+/* harmony import */ var bootstrap_sweetalert_dist_sweetalert_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_sweetalert_dist_sweetalert_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var bootstrap_sweetalert_dist_sweetalert_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bootstrap-sweetalert/dist/sweetalert.css */ "./node_modules/bootstrap-sweetalert/dist/sweetalert.css");
+/* harmony import */ var bootstrap_sweetalert_dist_sweetalert_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bootstrap_sweetalert_dist_sweetalert_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+
+
 
 
 
@@ -56854,7 +58231,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: "app",
   render: function render(h) {
-    return h(_components_App__WEBPACK_IMPORTED_MODULE_3__["default"]);
+    return h(_components_App__WEBPACK_IMPORTED_MODULE_5__["default"]);
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (app);
@@ -56948,8 +58325,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/ebuenjrclemente/Documents/DevPlayground/appetiser-events/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/ebuenjrclemente/Documents/DevPlayground/appetiser-events/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/bobbyclemente/Documents/Playground/eventapp-using-laravel-vuejs/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/bobbyclemente/Documents/Playground/eventapp-using-laravel-vuejs/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

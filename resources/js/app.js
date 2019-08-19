@@ -1,6 +1,8 @@
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-sweetalert/dist/sweetalert.js";
+import "bootstrap-sweetalert/dist/sweetalert.css";
 
 Vue.use(BootstrapVue);
 
